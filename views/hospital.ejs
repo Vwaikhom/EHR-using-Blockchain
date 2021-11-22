@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EHR</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+    <link rel="stylesheet" href="/stylesheets/app.css" />
+  </head>
+
+  <body class="d-flex flex-column vh-100">
+    <script>
+
+      const Hospital = [
+	
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "hospital_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_hospital_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_hospital_address",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_hospital_spec",
+          "type": "string"
+        }
+      ],
+      "name": "register_hospital",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "hospital_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_hospital_details",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+
+      let account;
+
+      window.addEventListener("load", async () => {
+        if (typeof window.ethereum !== "undefined") {
+          console.log("MetaMask is installed.");
+        }
+
+        // Modern DApp browsers
+        if (window.ethereum) {
+          window.web3 = new Web3(ethereum);
+
+          // To prevent the page reloading when the MetaMask network changes
+          ethereum.autoRefreshOnNetworkChange = false;
+
+          // To Capture the account details from MetaMask
+          const accounts = await ethereum.enable();
+          account = accounts[0];
+		  //console.log(account);
+        }
+
+        // Non-DApp browsers
+        else {
+          console.log("Please install MetaMask");
+        }
+      });
+
+      const contractaddress = "0xD480bAD6cf2A8F35eaf66F48325EfE394dE89100";
+
+      async function add_details() {
+        const ID = document.getElementById("hospital_id").value;
+        const name = document.getElementById("hospital_name").value;
+        const address = document.getElementById("hospital_address").value;
+        const specification = document.getElementById("hospital_specification").value;
+		
+		const myContract = new web3.eth.Contract(Hospital,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+
+        const result = await myContract.methods.register_hospital(ID, name, address, specification).send();
+
+		if(result)
+			console.log(result);
+		else
+			console.log("An error has occurred!");
+      }
+    </script>
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Blockchain EHR</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/view_hospital">View Hospitals</a>
+          </div>
+          <div class="navbar-nav ml-auto"></div>
+        </div>
+      </div>
+    </nav>
+    <main class="container mt-5">
+      <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="row">
+          <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Register</h5>
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label" for="hospital_id"
+                      >Hospital ID</label
+                    >
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="hospital_id"
+                      name="hospital_id"
+                      required
+                      autofocus
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="hopital_name"
+                      >Hospital Name</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="hospital_name"
+                      name="hospital_name"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="hospital_address"
+                      >Hopital address</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="hospital_address"
+                      name="hospital_address"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="hospital_specification"
+                      >Hopital specification</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="hospital_specification"
+                      name="hospital_specification"
+                      required
+                    />
+                  </div>
+                  <button
+                    class="btn btn-success btn-block"
+                    onclick="add_details()"
+                  >
+                    Register
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+      integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registeration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+</head>
+
+<body class="d-flex flex-column vh-100">
+    <script>
+        const Patient = [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_patient_name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_age",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_gender",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_height",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_weight",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_patient_address",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_phone_no",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_email_id",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_date",
+          "type": "uint256"
+        }
+      ],
+      "name": "store_patient_details",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_attendant_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_attendant_relation",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_attendant_phn_no",
+          "type": "uint256"
+        }
+      ],
+      "name": "store_attendant_details",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "retreive_patient_details",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "retreive_attendant_details",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+
+    let account;
+
+    window.addEventListener("load", async () => {
+        if (typeof window.ethereum !== "undefined") {
+          console.log("MetaMask is installed.");
+        }
+
+        // Modern DApp browsers
+        if (window.ethereum) {
+          window.web3 = new Web3(ethereum);
+
+          // To prevent the page reloading when the MetaMask network changes
+          ethereum.autoRefreshOnNetworkChange = false;
+
+          // To Capture the account details from MetaMask
+          const accounts = await ethereum.enable();
+          account = accounts[0];
+		  //console.log(account);
+        }
+
+        // Non-DApp browsers
+        else {
+          console.log("Please install MetaMask");
+        }
+      });
+
+      const contractaddress = "0xD5e1630C292641757a89e55efb61D1C5aF3CE6A6";
+
+      async function add_details() {
+        const ID = document.getElementById("patient_id").value;
+        const name = document.getElementById("patient_name").value;
+        const address = document.getElementById("address").value;
+        const age = document.getElementById("age").value;
+        const gender = document.getElementById("gender").value;
+        const height = document.getElementById("height").value;
+        const weight = document.getElementById("weight").value;
+        const phoneNo = document.getElementById("phoneNo").value;
+        const email = document.getElementById("email").value;
+        const date = document.getElementById("date").value;
+		
+		const myContract = new web3.eth.Contract(Patient,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+
+        const result = await myContract.methods.store_patient_details(ID, name, age, gender, height, weight, address, phoneNo, email, date).send();
+
+		if(result)
+			console.log(result);
+		else
+			console.log("An error has occurred!");
+      }
+    </script>
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Blockchain EHR</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/view_patient">View Patients</a>
+          </div>
+          <div class="navbar-nav ml-auto"></div>
+        </div>
+      </div>
+    </nav>
+    <main class="container mt-5">
+      <div class="container d-flex justify-content-center align-items-center mt-5">
+        <div class="row">
+          <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Register</h5>
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label" for="patient_id"
+                      >Patient ID</label
+                    >
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="patient_id"
+                      name="patient_id"
+                      required
+                      autofocus
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="patient_name"
+                      >Patient Name</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="patient_name"
+                      name="patient_name"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="age"
+                      >Age</label
+                    >
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="age"
+                      name="age"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="gender"
+                      >Gender</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="gender"
+                      name="gender"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="height"
+                      >Height</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="height"
+                      name="height"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="weight"
+                      >Weight</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="weight"
+                      name="weight"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="phoneNo"
+                      >Phone Number</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="phoneNo"
+                      name="phoneNo"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="address"
+                      >Address</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="address"
+                      name="address"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="email"
+                      >Email</label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="date"
+                      >Date</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="date"
+                      name="date"
+                      required
+                    />
+                  </div>
+                  <button
+                    class="btn btn-success btn-block"
+                    onclick="add_details()"
+                  >
+                    Register
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+    crossorigin="anonymous"></script>
+</body>
+</html>

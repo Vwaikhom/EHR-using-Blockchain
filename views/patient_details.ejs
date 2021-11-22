@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+
+    <link rel="stylesheet" href="/stylesheets/app.css" />
+  </head>
+
+<body class="d-flex flex-column vh-100">
+
+    <script>
+        const Patient = [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_patient_name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_age",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_gender",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_height",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_weight",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_patient_address",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_phone_no",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_email_id",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_date",
+          "type": "uint256"
+        }
+      ],
+      "name": "store_patient_details",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_attendant_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_attendant_relation",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_attendant_phn_no",
+          "type": "uint256"
+        }
+      ],
+      "name": "store_attendant_details",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "retreive_patient_details",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "retreive_attendant_details",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+
+  let account;
+
+    window.addEventListener("load", async () => {
+        if (typeof window.ethereum !== "undefined") {
+          console.log("MetaMask is installed.");
+        }
+
+        // Modern DApp browsers
+        if (window.ethereum) {
+          window.web3 = new Web3(ethereum);
+
+          // To prevent the page reloading when the MetaMask network changes
+          ethereum.autoRefreshOnNetworkChange = false;
+
+          // To Capture the account details from MetaMask
+          const accounts = await ethereum.enable();
+          account = accounts[0];
+		  //console.log(account);
+        }
+
+        // Non-DApp browsers
+        else {
+          console.log("Please install MetaMask");
+        }
+      });
+
+      const contractaddress = "0xD5e1630C292641757a89e55efb61D1C5aF3CE6A6";
+
+      async function show_details() {
+            const myContract = new web3.eth.Contract(Patient,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+            const idd = document.getElementById("patient-id").value;
+            const result = await myContract.methods.retreive_patient_details(idd).call();
+            console.log(result);
+        
+            document.getElementById("name").innerHTML = result[0];
+            document.getElementById("age").innerHTML = result[1];
+            document.getElementById("gender").innerHTML = result[2];
+            document.getElementById("height").innerHTML = result[3];
+            document.getElementById("weight").innerHTML = result[4];
+            document.getElementById("address").innerHTML = result[5];
+            document.getElementById("phoneNo").innerHTML = result[6];
+            document.getElementById("email").innerHTML = result[7];
+            document.getElementById("date").innerHTML = result[8];
+        }
+    </script>
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Blockchain EHR</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/view_history">View Patient Medical History</a>
+            <!-- <a class="nav-link" href="/checkup">Store Checkup Info</a> -->
+            <a class="nav-link" href="/checkup_details">Display Checkup Info</a>
+          </div>
+          <div class="navbar-nav ml-auto"></div>
+        </div>
+      </div>
+    </nav>
+    <main class="container mt-5">
+        <div class="container d-flex justify-content-center align-items-center mt-5">
+          <div class="row">
+            <div class="card mb-3">
+                <div class="card-body"> 
+                  <div class="input-group mb-3">
+                      <button class="btn btn-outline-secondary" type="button" value="Get Details" onclick="show_details()">Show Details</button>
+                      <input type="number" class="form-control" id = "patient-id"placeholder="patient ID" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                  </div>
+                  <h5>Patient Details:</h3>
+                  <table class="table-success table-bordered" style="width:100%">
+                      <tr>
+                          <th>Patient Name</th>
+                          <th>Age</th>
+                          <th>Gender</th>
+                          <th>Height</th>
+                          <th>Weight</th>
+                          <th>Address</th>
+                          <th>Phone No</th>
+                          <th>Email</th>
+                          <th>Date</th>
+                      </tr>
+                      <tr>
+                          <td><div id="name"></div></td>
+                          <td><div id="age"></div></td>
+                          <td><div id="gender"></div></td>
+                          <td><div id="height"></div></td>
+                          <td><div id="weight"></div></td>
+                          <td><div id="address"></div></td>
+                          <td><div id="phoneNo"></div></td>
+                          <td><div id="email"></div></td>
+                          <td><div id="date"></div></td>
+                      </tr>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+    integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+</body>
+</html>

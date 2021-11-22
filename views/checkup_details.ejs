@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Checkup Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.8/dist/web3.js"></script>
+</head>
+<body class="d-flex flex-column vh-100">
+    <script>
+        const Checkup = [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "approved",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ],
+      "name": "ApprovalForAll",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getApproved",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        }
+      ],
+      "name": "isApprovedForAll",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "ownerOf",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "safeTransferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_data",
+          "type": "bytes"
+        }
+      ],
+      "name": "safeTransferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ],
+      "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "namedecl",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symboldecl",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "medical_record",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_previous",
+          "type": "string"
+        }
+      ],
+      "name": "previous_dates",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_previous_dates",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_blood_test",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_urine_test",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_ecg",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_mri",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_ct",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_x_ray",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_lab_results",
+          "type": "string"
+        }
+      ],
+      "name": "investigations",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_investigations",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_built",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_nouirishment",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_eyes",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_tongue",
+          "type": "string"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_pulse",
+          "type": "uint64"
+        },
+        {
+          "internalType": "string",
+          "name": "_blood_pressure",
+          "type": "string"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_temp",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_respiratory_rate",
+          "type": "uint64"
+        }
+      ],
+      "name": "general_examin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_general_examin",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_cvs",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_cns",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_rs",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_abdomen",
+          "type": "string"
+        }
+      ],
+      "name": "sys_examin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "patient_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_sys_examin",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ];
+
+  let account;
+  window.addEventListener("load", async () => {
+    if (typeof window.ethereum !== "undefined") {
+      console.log("MetaMask is installed.");
+    }
+
+    // Modern DApp browsers
+    if (window.ethereum) {
+      window.web3 = new Web3(ethereum);
+
+      // To prevent the page reloading when the MetaMask network changes
+      ethereum.autoRefreshOnNetworkChange = false;
+
+      // To Capture the account details from MetaMask
+      const accounts = await ethereum.enable();
+      account = accounts[0];
+  //console.log(account);
+    }
+
+    // Non-DApp browsers
+    else {
+      console.log("Please install MetaMask");
+    }
+  });
+
+    const contractaddress = "0x87dea60FBD51b7c7CD05d1264bd15D2Ec9278c5b";
+
+    async function date_details() {
+      const myContract = new web3.eth.Contract(Checkup,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+      const idd = document.getElementById("tid1").value;
+      const result = await myContract.methods.get_previous_dates(idd).call();
+      console.log(result);
+      document.getElementById("get_dates1").innerHTML = result;
+    }
+
+    async function get_details() {
+      const myContract = new web3.eth.Contract(Checkup,contractaddress, {from: account, gasPrice: '5000000', gas: '500000'});
+      const idt = document.getElementById("tid").value;
+      const investigationsResult = await myContract.methods.get_investigations(idt).call();
+      const generalResult = await myContract.methods.get_general_examin(idt).call();
+      const sysResult = await myContract.methods.get_sys_examin(idt).call();
+      console.log(investigationsResult);
+      document.getElementById("get_blood").innerHTML = investigationsResult[0];
+      document.getElementById("get_uri").innerHTML = investigationsResult[1];
+      document.getElementById("get_ecg").innerHTML = investigationsResult[2];
+      document.getElementById("get_mri").innerHTML = investigationsResult[3];
+      document.getElementById("get_ct").innerHTML = investigationsResult[4];
+      document.getElementById("get_xray").innerHTML = investigationsResult[5];
+      document.getElementById("get_lab").innerHTML = investigationsResult[6];
+
+     // const generalResult = await myContract.methods.get_general_examin(idt).call();
+      console.log(generalResult);
+      document.getElementById("get_built").innerHTML = generalResult[0];
+      document.getElementById("get_nou").innerHTML = generalResult[1];
+      document.getElementById("get_eyes").innerHTML = generalResult[2];
+      document.getElementById("get_ton").innerHTML = generalResult[3];
+      document.getElementById("get_pulse").innerHTML = generalResult[4];
+      document.getElementById("get_bp").innerHTML = generalResult[5];
+      document.getElementById("get_temp").innerHTML = generalResult[6];
+      document.getElementById("get_res").innerHTML = generalResult[7];
+
+      //const sysResult = await myContract.methods.get_sys_examin(idt).call();
+      console.log(sysResult);
+      document.getElementById("get_cvs").innerHTML = sysResult[0];
+      document.getElementById("get_cns").innerHTML = sysResult[1];
+      document.getElementById("get_rs").innerHTML = sysResult[2];
+      document.getElementById("get_abs").innerHTML = sysResult[3];
+    }
+  </script>
+
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Blockchain EHR</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link" href="/view_history">View Patient Medical History</a>
+          <a class="nav-link" href="/checkup">Store Checkup Info</a>
+        </div>
+        <div class="navbar-nav ml-auto"></div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-5">
+    <div class="container d-flex justify-content-center align-items-center mt-5">
+      <div class="row">
+        <div class="card mb-3">
+            <div class="card-body"> 
+    <h3>Previous dates of medical record updated</h3>
+        <form>
+		<table style="width:25%">
+		  <tr>
+			<td>Enter Patient Id:</td>
+			<td><input type="text" id="tid1" name="tid1"></td>
+		  </tr>
+		  <tr><td><input type="button" onclick="date_details()" value="Get Details"></td></tr>
+            <tr>
+			<td> Dates:</td>
+			<td><div id="get_dates1"></div></td>
+		  </tr>
+		  <br>
+		</table>
+    <br>
+        </form>  
+		<h2>Patient Body Examine Details</h2>
+        <tr>
+			<td>Enter Record Id:</td>
+			<td><input type="text" id="tid" name="tid"></td>
+		  </tr>
+		  
+		 <tr><td><input type="button" onclick="get_details()" value="Get Details"></td></tr>
+     <br>
+     <br>
+      <h2>Investigations</h2>
+    <form>
+		<table style="width:35%">       
+    <tr>
+			<td> Blood Test:</td>
+			<td><div id="get_blood"></div></td>
+		</tr>
+		<tr>
+			<td>Urine Test:</td>
+			<td><div id="get_uri"></div></td>
+	  </tr>		   
+		<tr>
+			<td>ECG:</td>
+			<td><div id="get_ecg"></div></td>
+	  </tr>
+    <tr>
+			<td>MRI Scan:</td>
+			<td><div id="get_mri"></div></td>
+		</tr>
+		<tr>
+			<td>CT Scan:</td>
+			<td><div id="get_ct"></div></td>
+		</tr> 
+		<tr>
+			<td>X-ray:</td>
+			<td><div id="get_xray"></div></td>
+		</tr>
+		<tr>
+			<td>Lab Test(if any other):</td>
+			<td><div id="get_lab"></div></td>
+		</tr>
+		</table>
+	</form>
+  <br>
+	<h2> General Examination</h2>
+    <form>
+		<table style="width:25%"> 
+    <tr>
+			<td>Built:</td>
+			<td><div id="get_built"></div></td>
+		</tr>
+		<tr>
+			<td>Nourishment:</td>
+			<td><div id="get_nou"></div></td>
+		</tr>
+		<tr>
+			<td>Eyes:</td>
+			<td><div id="get_eyes"></div></td>
+		</tr>
+		<tr>
+			<td>Tongue:</td>
+			<td><div id="get_ton"></div></td>
+		</tr>
+		<tr>
+			<td>Pulse:</td>
+			<td><div id="get_pulse"></div></td>
+		</tr>
+		<tr>
+			<td>Blood Pressure:</td>
+			<td><div id="get_bp"></div></td>
+		</tr>
+		<tr>
+			<td>Temperature:</td>
+			<td><div id="get_temp"></div></td>
+		</tr>
+		<tr>
+			<td>Respiratory rate:</td>
+			<td><div id="get_res"></div></td>
+		</tr>
+		</table>
+	</form>
+  <br>
+	<h2> Systemic Examination</h2>
+  <form>
+		<table style="width:25%">           
+    <tr>
+			<td> CVS:</td>
+			<td><div id="get_cvs"></div></td>
+		</tr>
+		  <tr>
+			<td>CNS:</td>
+			<td><div id="get_cns"></div></td>
+		</tr>
+		<tr>
+			<td>RS:</td>
+			<td><div id="get_rs"></div></td>
+	  </tr>
+		<tr>
+			<td>Abdomen system:</td>
+			<td><div id="get_abs"></div></td>
+	  </tr>
+	</table>
+	</form>
+  </div>
+  </div>
+  </div>
+  </div>
+  </main>
+  
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+</body>
+</html>
